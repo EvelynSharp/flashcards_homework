@@ -18,6 +18,8 @@ submit = (e) => {
   let {defaults}=this.props;
     if(!defaults){
       card.cardId = newId;
+    } else {
+      card.cardId = defaults.cardId;
     }
   handleSubmit(card);
   this.refs.flashCardForm.reset();
