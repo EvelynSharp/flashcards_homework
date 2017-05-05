@@ -1,9 +1,9 @@
 import React from 'react';
 import BASE_URL from '../url';
-//import ProductForm from './ProductForm';
+import FlashcardForm from './FlashcardForm';
 
 class IndividualCard extends React.Component {
-//  state = { flashcard: {} }
+ // state = { fCard: {} }
 
   // componentDidMount() {
   //   fetch(`${BASE_URL}/${this.props.id}`)
@@ -12,24 +12,32 @@ class IndividualCard extends React.Component {
   // }
 
   render() {
-    let { toggleCard, side, sersInfo,flashCards,showAll, removeCard, updateCard, id } = this.props;
-    let { flashcard: { question, answer, cardId }} = flashCards.filter(c => c.id == id);
+    let { toggleCard, side, sersInfo, flashCards, showAll, removeCard, updateCard, id } = this.props;
+    let  flashcard = flashCards.filter(c => c.cardId == id);
 
+    // let flas = flashcard.map( f => {
+    //   return (
+    //   side =='front' ?
+    //     <h1>{f.question}</h1>
+    //     :
+    //     <h1>{f.answer}</h1>
+    //   )
+    // })
     return (
-      <div onClick ={()=>{toggleCard(side)}}>
-        {side =='front' ?
-          <h1>{question}</h1>
+      <div>
+        { side =='front' ?
+          <h1 onClick ={()=>{toggleCard(side)}}>{flashcard[0].question}</h1>
           :
-          <h1>{answer}</h1>
+          <h1 onClick ={()=>{toggleCard(side)}}>{flashcard[0].answer}</h1>
         }
         <div>
+          <FlashcardForm handleSubmit={updateCard} defaults={{ question:flashcard[0].question,answer:flashcard[0].answer,cardId:flashcard[0].cardId }}/>
           <button onClick={showAll}>Show All</button>
           <button onClick={removeCard}>Delete</button>
+
         </div>
 
-        {/*
-        <ProductForm handleSubmit={updateProduct} defaults={{ name, description, base_price }} />
-        */}
+
       </div>
     )
   }

@@ -8,7 +8,7 @@ import FlashcardForm from './components/FlashcardForm';
 
 
 class App extends Component {
-  state = {usersInfo:[],flashCards:[],showAll:true,cardId:null, side:'front'}
+  state = {usersInfo:[],flashCards:[],showAll:true,cardId:null,cardTotal:0, side:'front'}
 
   // componentDidMount() {
   //   fetch(BASE_URL)
@@ -25,16 +25,16 @@ class App extends Component {
   this.setState({ showAll: true, cardId: null })
   }
 
-  addCard =(card) =>{
-      let flashCards = this.state.flashCards;
-      this.setState({flashCards:[...flashCards,card]})
+  addCard = (card) =>{
+      let { flashCards, cardTotal } = this.state;
+      this.setState({flashCards:[...flashCards,card], cardTotal:++cardTotal})
   }
 
 
   removeCard = () => {
     let{cardId, flashCards} = this.state;
     this.setState({
-      flashCards: flashCards.filter(c => c.id !== cardId),
+      flashCards: flashCards.filter(c => c.cardId !== cardId),
       showAll: true,
       productId: null
     });
@@ -42,8 +42,14 @@ class App extends Component {
   }
 
 
-  updateCard = () => {
-
+  updateCard = (card) => {
+    let{cardId}=this.state;
+    let flashCards = this.state.flashCards.map( c => {
+      if(c.cardId === cardId)
+        return card
+      return c
+    });
+    this.setState({flashCards, showAll:true, cardId:null})
 
   }
 
@@ -57,7 +63,7 @@ class App extends Component {
   }
 
   render() {
-    let { usersInfo, flashCards, cardId, showAll } = this.state;
+    let { usersInfo, flashCards, cardId, showAll, cardTotal } = this.state;
     return (
       <div className="App">
 
@@ -65,7 +71,7 @@ class App extends Component {
         <div>
           {/*<UsersInfoCards usersInfo={usersInfo} show={this.show} />*/}
 
-          <FlashcardForm handleSubmit={this.addCard}/>
+          <FlashcardForm cardTotal={cardTotal} flashCards={flashCards} handleSubmit={this.addCard}/>
           <FlashCards flashCards={flashCards} show={this.show}/>
           {/*<ProductForm handleSubmit={this.addProduct} />*/}
         </div>
