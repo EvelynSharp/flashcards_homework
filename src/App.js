@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import BASE_URL from './url';
 import './App.css';
-import usersInfoCards from './components/usersInfoCards';
+import UsersInfoCards from './components/usersInfoCards';
 
 class App extends Component {
   state = {usersInfo:[],flashCards:[],showAll:true,cardId:null, side:'front'}
@@ -22,13 +22,13 @@ class App extends Component {
   }
 
   render() {
-    let { usersInfo, flashCards, cardId } = this.state;
+    let { usersInfo, flashCards, cardId, showAll } = this.state;
     return (
       <div className="App">
 
       { showAll ?
         <div>
-          <usersInfoCards usersInfo={usersInfo} show={this.show} />
+          <UsersInfoCards usersInfo={usersInfo} show={this.show} />
           {/*<ProductForm handleSubmit={this.addProduct} />*/}
         </div>
         :
