@@ -33,7 +33,7 @@ submit = (e) => {
         <br />
         <input type="text" ref="answer" id="answer" placeholder="Enter your flashcard answer here" />
         <br />
-        <button>{ defaults ? 'Update' : 'Add' }</button>
+        <button className="btn blue lighten-3">{ defaults ? 'Update' : 'Add' }</button>
       </form>
     )
   }

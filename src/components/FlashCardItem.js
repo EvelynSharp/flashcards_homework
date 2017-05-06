@@ -7,8 +7,8 @@ const styles = {
 }
 //think about how to add new id to new cards vs exisiting user id
 const FlashCardItem = ({ question, answer, cardId, show }) => (
-  
-  <div onClick={() => show(cardId)} style={styles.link}>{question}</div>
+
+  <div className="list-items" onClick={() => show(cardId)} style={styles.link}>{question}</div>
 )
 
 export default FlashCardItem;

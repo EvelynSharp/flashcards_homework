@@ -68,7 +68,7 @@ class App extends Component {
       <div className="App">
 
       { showAll ?
-        <div>
+        <div className = 'center'>
           {/*<UsersInfoCards usersInfo={usersInfo} show={this.show} />*/}
 
           <FlashcardForm cardTotal={cardTotal} flashCards={flashCards} handleSubmit={this.addCard}/>

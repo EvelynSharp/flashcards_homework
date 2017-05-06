@@ -2,7 +2,7 @@ import React from 'react';
 import FlashCardItem from './FlashCardItem';
 
 const FlashCards = ({ flashCards, show }) => (
-  <div>
+  <div className="list-container">
     { flashCards.map( fCard => <FlashCardItem key={fCard.cardId} {...fCard} show={show} /> ) }
   </div>
 )
