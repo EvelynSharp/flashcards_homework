@@ -8,24 +8,26 @@ import FlashcardForm from './components/FlashcardForm';
 
 
 class App extends Component {
-  state = {usersInfo:[],flashCards:[],showAll:true,cardId:null,cardTotal:0, side:'front'}
+  state = {usersInfo:[],flashCards:[],showAll:true,cardId:null,cardTotal:0, side:'front', ifUser:false}
 
-  // componentDidMount() {
-  //   fetch(BASE_URL)
-  //     .then( res => res.json() )
-  //     .then( usersInfo => this.setState({ usersInfo }) )
-  //     .catch( err => console.log(err) )
-  // }
+  componentDidMount() {
+    fetch(BASE_URL)
+      .then( res => res.json() )
+      .then( usersInfo => this.setState({ usersInfo }) )
+      .catch( err => console.log(err) )
+  }
 
-  show = (cardId) => {
+  show = (cardId, ifUser) => {
     this.setState({ showAll: false, cardId })
+    if (ifUser)
+      this.setState({ifUser: true})
   }
 
   showAll = () => {
-  this.setState({ showAll: true, cardId: null })
+  this.setState({ showAll: true, cardId: null, ifUser:false })
   }
 
-  addCard = (card) =>{
+  addCard = (card, ifUser) =>{
       let { flashCards, cardTotal } = this.state;
       this.setState({flashCards:[...flashCards,card], cardTotal:++cardTotal})
   }
@@ -41,6 +43,26 @@ class App extends Component {
 
   }
 
+  updateUserInfo = (card) => {
+    let { cardId } = this.state;
+    fetch(`${BASE_URL}/${cardId}`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      method: 'PUT',
+      body: JSON.stringify(card)
+    }).then( res => res.json() )
+      .then( u => {
+        let usersInfo = this.state.usersInfo.map( uInfo => {
+          if (uInfo.id === cardId)
+            return u
+          return uInfo
+        });
+        this.setState({ usersInfo, showAll: true, cardId: null, ifUser:false });
+      })
+  }
+
 
   updateCard = (card) => {
     let{cardId}=this.state;
@@ -49,7 +71,7 @@ class App extends Component {
         return card
       return c
     });
-    this.setState({flashCards, showAll:true, cardId:null})
+    this.setState({flashCards, showAll:true, cardId:null, ifUser:false })
 
   }
 
@@ -63,28 +85,31 @@ class App extends Component {
   }
 
   render() {
-    let { usersInfo, flashCards, cardId, showAll, cardTotal } = this.state;
+    let { usersInfo, flashCards, cardId, showAll, cardTotal, ifUser, side } = this.state;
     return (
       <div className="App">
 
       { showAll ?
         <div className = 'center'>
-          {/*<UsersInfoCards usersInfo={usersInfo} show={this.show} />*/}
 
-          <FlashcardForm cardTotal={cardTotal} flashCards={flashCards} handleSubmit={this.addCard}/>
+
+          <FlashcardForm cardTotal={cardTotal} flashCards={flashCards} usersInfo={usersInfo} ifUser={ifUser} handleSubmit={this.addCard}/>
           <FlashCards flashCards={flashCards} show={this.show}/>
+          <UsersInfoCards usersInfo={usersInfo} show={this.show} />
           {/*<ProductForm handleSubmit={this.addProduct} />*/}
         </div>
         :
         <IndividualCard
           toggleCard = {this.toggleCard}
-          usersInfo = {this.state.usersInfo}
-          flashCards = {this.state.flashCards}
+          side = {side}
+          usersInfo = {usersInfo}
+          flashCards = {flashCards}
+          showAll={this.showAll}
           removeCard={this.removeCard}
           updateCard={this.updateCard}
-          showAll={this.showAll}
           id={cardId}
-          side = {this.state.side}
+          ifUser={ifUser}
+          updateUserInfo={this.updateUserInfo}
         />
       }
 
